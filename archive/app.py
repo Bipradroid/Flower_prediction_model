@@ -10,13 +10,21 @@ st.header('🌸 Flower Recognition Model')
 # Define the classes
 flower_name = ['Lilly', 'Lotus', 'Orchid', 'Sunflower', 'Tulip']
 
-# Load the model once
-model = load_model('archive/flower_recognition_model.h5')
+# Define model path relative to current script
+current_dir = os.path.dirname(os.path.abspath(__file__))
+model_path = os.path.join(current_dir, 'archive', 'flower_recognition_model.h5')
+
+# Check if model file exists and load
+if not os.path.exists(model_path):
+    st.error(f"❌ Model file not found at {model_path}. Please upload the model to this location.")
+    st.stop()  # Stop execution if model is missing
+else:
+    model = load_model(model_path)
 
 # Define the prediction function
 def call(input_image_path):
     input_image = tf.keras.utils.load_img(input_image_path, target_size=(180, 180))
-    input_image_array = tf.keras.utils.img_to_array(input_image)
+    input_image_array = tf.keras.utils.img_to_array(input_image) / 255.0  # Normalize pixel values
     input_image_exp_dim = tf.expand_dims(input_image_array, 0)
     predictions = model.predict(input_image_exp_dim)
     result = tf.nn.softmax(predictions[0])
@@ -28,14 +36,11 @@ def call(input_image_path):
 
 # Upload file
 upload_file = st.file_uploader("📤 Upload your image here", type=["jpg", "jpeg", "png"])
+
 # Fancy sidebar
 st.sidebar.markdown("## 🌸 Flower Classifier")
 st.sidebar.markdown("This app predicts which flower is in the image.")
-
-# Add a divider
 st.sidebar.markdown("---")
-
-# Add a styled block with HTML
 st.sidebar.markdown(
     """
     <div style='background-color:#000000;padding:10px;border-radius:10px'>
@@ -44,18 +49,11 @@ st.sidebar.markdown(
     </div>
     """, unsafe_allow_html=True
 )
-
-# Add a little space
 st.sidebar.markdown("")
-
-# Add the class labels with icons
 st.sidebar.markdown("### 🌼 Flower Classes:")
 st.sidebar.markdown("- 🌺 **Lilly**\n- 🌸 **Lotus**\n- 🏵️ **Orchid**\n- 🌻 **Sunflower**\n- 🌷 **Tulip**")
-
-# Add a fun emoji footer
 st.sidebar.markdown("---")
 st.sidebar.markdown("Made with ❤️ by Bipradeep")
-
 
 # Process uploaded file
 if upload_file is not None:
@@ -72,6 +70,8 @@ if upload_file is not None:
 
     # Run prediction and display result
     prediction = call(save_path)
+    st.success(prediction)
+
     st.markdown(prediction)
    
 
