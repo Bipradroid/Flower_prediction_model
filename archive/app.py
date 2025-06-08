@@ -12,7 +12,7 @@ flower_name = ['Lilly', 'Lotus', 'Orchid', 'Sunflower', 'Tulip']
 
 # Define model path relative to current script
 current_dir = os.path.dirname(os.path.abspath(__file__))
-model_path = os.path.join(current_dir, 'archive', 'flower_recognition_model.h5')
+model_path = os.path.join(current_dir, 'flower_recognition_model.h5')
 
 # Check if model file exists and load
 if not os.path.exists(model_path):
