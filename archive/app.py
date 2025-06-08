@@ -11,7 +11,7 @@ st.header('🌸 Flower Recognition Model')
 flower_name = ['Lilly', 'Lotus', 'Orchid', 'Sunflower', 'Tulip']
 
 # Load the model once
-model = load_model(r'C:\Users\biswa\Downloads\archive\flower_recognition_model.h5')
+model = load_model('archive/flower_recognition_model.h5')
 
 # Define the prediction function
 def call(input_image_path):
